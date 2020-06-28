@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, Button, Modal, ModalBody, ModalHeader, Row, Col, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LocalForm, Control, Errors } from "react-redux-form";
+import { Loading } from './LoadingComponent';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -34,15 +35,15 @@ class CommentForm extends Component {
             <>
                 <Button outline onClick={this.toggleComment}>
                     Submit Comment
-            </Button>
+                </Button>
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleComment}>
                     <ModalHeader toggle={this.toggleComment}>
                         Submit Comment
-            </ModalHeader>
+                    </ModalHeader>
                     <ModalBody>
                         <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
                             <Row className="form-group">
-                                <Col > Rating
+                                <Col> Rating
                                     <Control.select model=".rating" name="rating"
                                         className="form-control">
                                         <option>1</option>
@@ -54,7 +55,6 @@ class CommentForm extends Component {
                                 </Col>
                             </Row>
                             <Row className="form-group">
-
                                 <Col> Your Name
                                     <Control.text model=".author" id="author" name="author"
                                         placeholder="Your Name"
@@ -144,7 +144,27 @@ function RenderComments({ comments, addComment, dishId }) {
 
 const DishDetail = (props) => {
 
-    if (props.dish != null) {
+    if (props.isLoading) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+
+    else if (props.errMess) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        );
+    }
+
+    else if (props.dish != null) {
         return (
             <div className="container">
                 <div className="row">
